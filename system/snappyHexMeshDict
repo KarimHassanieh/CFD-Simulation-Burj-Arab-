@@ -1,0 +1,122 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#includeEtc "caseDicts/mesh/generation/snappyHexMeshDict.cfg"
+
+castellatedMesh on;
+snap            on;
+addLayers       off;
+
+geometry
+{
+    buildings
+    {
+        type triSurfaceMesh;
+        file "burj.stl";
+      }
+
+  refinementBox1
+  {
+   type searchableBox;
+   min (-200 -150 0);
+   max (400 150 340); 
+  }
+
+  refinementBox2
+  {
+   type searchableBox;
+   min (-100 -100 0);
+   max (250 100 330); 
+  }
+
+
+};
+
+castellatedMeshControls
+{
+    features
+    (
+      { file "burj.eMesh"; level 1; }
+    );
+
+    refinementSurfaces
+    {
+        buildings
+        {
+            level (4 5);
+            patchInfo { type wall; }
+
+           
+        }
+    }
+
+    refinementRegions
+    {
+       refinementBox1 
+        {
+            mode    inside;
+            level   2;
+        }
+       refinementBox2
+       {
+       mode inside ;
+       level 3;
+       
+       }
+    
+    
+    }
+
+
+    insidePoint (200 0 200); // Offset from (0 0 0) to avoid
+                                     // coinciding with face or edge
+    nCellsBetweenLevels 5;
+}
+
+snapControls
+{
+//  explicitFeatureSnap    true;
+//  implicitFeatureSnap    false;
+}
+
+addLayersControls
+{
+    layers
+    {
+        "CAD.*"
+        {
+            nSurfaceLayers 3;
+        }
+    }
+
+    relativeSizes       true; // false, usually with firstLayerThickness
+    expansionRatio      1.2;
+    finalLayerThickness 0.5;
+    minThickness        1e-3;
+//  firstLayerThickness 0.01;
+
+//  maxThicknessToMedialRatio 0.6;
+}
+
+writeFlags
+(
+//    scalarLevels
+    layerSets
+    layerFields
+);
+
+mergeTolerance 1e-6;
+
+// ************************************************************************* //
