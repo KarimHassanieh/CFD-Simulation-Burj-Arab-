@@ -1,5 +1,5 @@
 # CFD-Simulation-Burj-Arab-
-CFD Simulation of Burj Arab Building using OpenFOAM dev 
+CFD Simulation of Burj Arab Building in UAE using OpenFOAM dev 
 Inspired by https://www.cfdsupport.com/building-wind-load-tcfd-simulation-burj-al-arab.html
 
 ![results](results/v1.gif)
